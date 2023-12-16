@@ -1,0 +1,53 @@
+{
+    
+    "containerDefinitions": [
+        {
+            "name": "ENV-PRJ-NAME",
+            "image": "090522427917.dkr.ecr.eu-west-1.amazonaws.com/ENV-PRJ-NAME:latest",
+            "cpu": 0,
+            "portMappings": [
+                {
+                    "name": "ENV-PRJ-NAME-8080-tcp",
+                    "containerPort": 8080,
+                    "hostPort": 8080,
+                    "protocol": "tcp",
+                    "appProtocol": "http"
+                }
+            ],
+            "essential": true,
+            "environment": [{
+                "name": "environment",
+                "value": "ENV"
+            }],
+            "environmentFiles": [],
+            "mountPoints": [],
+            "volumesFrom": [],
+            "ulimits": [],
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-create-group": "true",
+                    "awslogs-group": "/ecs/ENV-PRJ-NAME",
+                    "awslogs-region": "eu-west-1",
+                    "awslogs-stream-prefix": "ecs"
+                }
+            }
+        }
+    ],
+    "family": "ENV-PRJ-NAME",
+    "taskRoleArn": "arn:aws:iam::090522427917:role/ecsTaskExecutionRole",
+    "executionRoleArn": "arn:aws:iam::090522427917:role/ecsTaskExecutionRole",
+    "networkMode": "awsvpc",
+    "volumes": [],
+    "placementConstraints": [],
+    "requiresCompatibilities": [
+        "FARGATE"
+    ],
+    "cpu": "8192",
+    "memory": "16384",
+    "runtimePlatform": {
+        "cpuArchitecture": "X86_64",
+        "operatingSystemFamily": "LINUX"
+    },
+    "tags": []
+}
