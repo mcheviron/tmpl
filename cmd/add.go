@@ -3,7 +3,7 @@ package cmd
 import (
 	"bufio"
 	"fmt"
-	"log"
+	"log/slog"
 	"os"
 	"path"
 	"strings"
@@ -12,7 +12,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func Add(eLogger *log.Logger) *cobra.Command {
+func Add(logger *slog.Logger) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "add",
 		Short: "Add a new project",
@@ -20,21 +20,21 @@ func Add(eLogger *log.Logger) *cobra.Command {
 		Run: func(cmd *cobra.Command, args []string) {
 			projectName, err := getPrjName()
 			if err != nil {
-				eLogger.Printf("Failed to get project name: %v", err)
+				logger.Error("Failed to get project name:", err)
 
 				return
 			}
 
 			ecs, err := cmd.Flags().GetBool("ecs")
 			if err != nil {
-				eLogger.Printf("Failed to get ECS flag: %v", err)
+				logger.Error("Failed to get ECS flag:", err)
 
 				return
 			}
 
 			gh, err := cmd.Flags().GetBool("gh")
 			if err != nil {
-				eLogger.Printf("Failed to get GitHub flag: %v", err)
+				logger.Error("Failed to get GitHub flag:", err)
 
 				return
 			}
@@ -45,7 +45,7 @@ func Add(eLogger *log.Logger) *cobra.Command {
 				wg.Add(1)
 				go func() {
 					defer wg.Done()
-					generateECS(projectName, eLogger)
+					generateECS(projectName, logger)
 				}()
 			}
 
@@ -53,7 +53,7 @@ func Add(eLogger *log.Logger) *cobra.Command {
 				wg.Add(1)
 				go func() {
 					defer wg.Done()
-					generateGH(projectName, eLogger)
+					generateGH(projectName, logger)
 				}()
 			}
 

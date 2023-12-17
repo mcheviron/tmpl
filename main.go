@@ -1,7 +1,7 @@
 package main
 
 import (
-	"log"
+	"log/slog"
 	"os"
 
 	"github.com/mcheviron/tmpl/cmd"
@@ -9,9 +9,12 @@ import (
 )
 
 func main() {
-	eLogger := log.New(os.Stdout, "ERROR: ", log.Lshortfile)
+	logger := slog.New(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{
+		AddSource: true,
+		Level:     slog.LevelDebug,
+	}))
 
 	var rootCmd = &cobra.Command{Use: "tmpl"}
-	rootCmd.AddCommand(cmd.New(eLogger), cmd.Add(eLogger))
+	rootCmd.AddCommand(cmd.New(logger), cmd.Add(logger))
 	rootCmd.Execute()
 }
